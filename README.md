@@ -1,4 +1,10 @@
 # SP_varying_lattice
 Matlab_lattice
 
-![SP_variant]()
+
+|------------------------------------------------------------------------------------------------------------------------|
+![SP_variant](https://github.com/issahi62/SP_varying_lattice/blob/master/SpatiallyVariantGratings-master/SVLATTICE2.png) |
+
+![SP_variant](https://github.com/issahi62/SP_varying_lattice/blob/master/SpatiallyVariantGratings-master/SVLATTICE2D.png) |
+![SP_variant](https://github.com/issahi62/SP_varying_lattice/blob/master/SpatiallyVariantGratings-master/SVLATTICED.png)
+![SP_variant](https://github.com/issahi62/SP_varying_lattice/blob/master/SpatiallyVariantGratings-master/SVLATTICE2.png)
