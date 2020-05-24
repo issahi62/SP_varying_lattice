@@ -1,0 +1,93 @@
+%% SPATIALLY VARING LATTICE 
+
+
+%% %%%%%%%% INITIALIZATION %%%%%%%%%%%
+clc 
+close all 
+clear 
+
+%% %%%%%%%% DASHBOARD  %%%%%%%%%%% 
+
+% GRATING PARAMETERS 
+a =1; 
+er1 = 2.5; 
+er2 = 1; 
+gth = 0; 
+r = .35;
+ff=1;
+  
+% GRID PARAMETERS 
+Sx = 5*a; 
+Sy = Sx; 
+Nx = 200; 
+Ny = round(Nx*Sy/Sx); 
+
+% CALCULATE GRID
+dx = Sx/Nx; 
+dy = Sy/Ny; 
+xa = [1:Nx]*dx; 
+ya = [1:Ny]*dy; 
+[Y, X] = meshgrid(ya, xa); 
+
+%% %%%%%%%% SPATIALLY VIRIANT  %%%%%%%%%%%
+% phase % periodicity % threshold % grating 
+% k(r)  % ^(r)        % > n1      % eps =cos(..);
+
+PER = (X.^2 + Y.^2) < r^2; 
+PER = er1 + (er2-er1)*PER; 
+%PER = a*ones(Nx, Ny); 
+THETA = atan2(Y,X); 
+
+% CALCULATE K-FUNCTION 
+Kx = 2*pi./PER.*cos(THETA); 
+Ky = 2*pi./PER.*sin(THETA); 
+
+% COMPUTE PHI USING FDDER  
+NS  = [Nx Ny];
+RES = [dx dy];
+BC  = [1 1];
+[DX,~,DY,~] = fdder(NS,RES,BC);
+
+% GENERATE NECESSARY MATRICES
+A = [DX ; DY];
+b = [Kx(:) ; Ky(:)];
+
+% COMPUTE GRATING PHASE
+PHI = (A.'*A)\(A.'*b);
+PHI = reshape(PHI,Nx,Ny);
+PHI = interp2(PHI, 2*Nx, 2*Ny);
+
+
+%% Grating 
+ERA = cos(ff*PHI); 
+
+%% THRESHOLD 
+ERB = er1*(ERA <= gth) + er2*(ERA>gth);
+
+
+%% FFT section of a lattice 
+% 
+% ERF = fftshift(fft2(ER))/(Nx*Ny); 
+% 
+% %TRuncate spatial harmonics 
+% p0 = 1+floor(Nx/2); 
+% q0 = 1+ floor(Ny/2); 
+% 
+% p1 = p0 -floor(P/2); 
+% p2 =  p0 + floor(P/2); 
+% q1 = q0 -floor(Q/2); 
+% q2 =  q0 + floor(Q/2); 
+
+% ERF = ERF(p1:p2, q1:p2); 
+
+
+%% Plotting section 
+
+imagesc(xa, ya, ERB); 
+colormap('bone');
+axis equal tight;  
+axis xy; 
+colorbar
+
+
+
